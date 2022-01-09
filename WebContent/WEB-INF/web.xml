@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://Java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 	<display-name>Semi</display-name>
 	<welcome-file-list>
@@ -12,31 +12,57 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	<servlet>
-
-		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-
-		<init-param>
-
-			<param-name>contextConfigLocation</param-name>
-
-			<param-value>
-            /WEB-INF/config/base/Semi.xml
-            </param-value>
-
-		</init-param>
-
-		<load-on-startup>1</load-on-startup>
-
-	</servlet>
-
-	<servlet-mapping>
-
-		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-
-		<url-pattern>*.do</url-pattern>
-
-	</servlet-mapping>
+	<!-- 웹 애플리케이션의 최상단에 위치하는 Context 지정 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
+  </context-param>
+  
+  <!-- DispatcherServlet 경로 Setting -->
+  <servlet>
+  	<servlet-name>dispatcherServlet</servlet-name>
+  	<servlet-class>
+  		org.springframework.web.servlet.DispatcherServlet
+  	</servlet-class>
+  	<!-- contextLoader가 해당 위치의 설정 파일을 읽어, 해당 파일을 dispatcher servlet으로 만든다. -->
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>
+  			/WEB-INF/spring/servlet-context.xml
+  		</param-value>
+  	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <!-- url mapping -->
+  <servlet-mapping>
+	<servlet-name>dispatcherServlet</servlet-name>
+	<url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Listener Setting -->
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <!-- 한글 Setting -->
+  <filter>
+  	<filter-name>encodingFilter</filter-name>
+  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  	
+  	<init-param>
+  		<param-name>encoding</param-name>	<!-- UTF-8 적용 -->
+  		<param-value>UTF-8</param-value>
+  	</init-param>
+  	
+  	<init-param>
+  		<param-name>forceEncoding</param-name>	<!-- 더욱 강력한 셋팅 -->
+  		<param-value>true</param-value>
+  	</init-param>
+  </filter>
+  
+  <filter-mapping>
+  	<filter-name>encodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern>	<!-- 모든 파일에 필터 적용 -->
+  </filter-mapping>
 </web-app>
